@@ -1,11 +1,12 @@
 name: Alarm Config Logger Docker Image CI
 
 on:
-  push:
-    branches: [ "master" ]
-    paths: services/alarm-config/logger/**
-    tags:
-      - '**'
+  [workflow_dispatch]
+  # push:
+  #   branches: [ "master" ]
+  #   paths: services/alarm-config/logger/**
+  #   tags:
+  #     - '**'
 
 env:
   REGISTRY: ghcr.io
