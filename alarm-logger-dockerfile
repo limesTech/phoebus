@@ -9,6 +9,9 @@ RUN mvn -q -DskipTests install
 
 
 FROM eclipse-temurin:21-jre-alpine AS alarmlogger
+ENV ALARMLOGGER_PROPERTIES=/alarmlogger/application.properties
+ENV LOGGING_PROPERTIES=/alarmlogger/logging.properties
 RUN apk update 
 COPY --from=build build/services/alarm-logger/target/service-alarm-logger-*.jar /alarmlogger/service-alarm-logger.jar
-CMD ["java", "-jar", "/alarmlogger/service-alarm-logger.jar"]
+ENTRYPOINT [ "java", "-jar", "/alarmlogger/service-alarm-logger.jar"]
+CMD [ "-properties", "${ALARMLOGGER_PROPERTIES}", "-logging", "${LOGGING_PROPERTIES} -noshell"]
