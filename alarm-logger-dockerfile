@@ -1,0 +1,14 @@
+FROM maven:eclipse-temurin AS build
+RUN apt-get update
+COPY . ./build
+WORKDIR /build
+RUN mvn verify -f ./dependencies/pom.xml
+RUN mvn -q -DskipTests install
+WORKDIR /build/services/alarm-logger
+RUN mvn -q -DskipTests install
+
+
+FROM eclipse-temurin:21-jre-alpine AS alarmlogger
+RUN apk update 
+COPY --from=build build/services/alarm-logger/target/service-alarm-logger-*.jar /alarmlogger/service-alarm-logger.jar
+CMD ["java", "-jar", "/alarmlogger/service-alarm-logger.jar"]
